@@ -39,7 +39,7 @@
      DartSassBuilderDependencyHash the new hash
 -->
   <Target Name="DartSass_DetermineBuildNeeded"  
-          BeforeTargets="BeforeBuild"  
+          BeforeTargets="AssignTargetPaths"  
           Condition="'@(SassFile->Count())'!='0' and '$(DartSassShouldBuildBasedOnSassFiles)'=='true' ">
 
     <Message Text="Evaluating Sass files" Importance="$(DartSassMessageLevel)" />
@@ -74,7 +74,7 @@
 -->
   <Target Name="DartSass_BuildArgsFromFileList" 
           DependsOnTargets="DartSass_DetermineBuildNeeded"
-          BeforeTargets="BeforeBuild"  
+          BeforeTargets="AssignTargetPaths"  
           Condition="'$(_DartSassHashChanged)-$(DartSassShouldBuildBasedOnSassFiles)' == 'true-true' ">
     <PropertyGroup>
       <_SassFileList>@(SassFilesToCompile->'&quot;%(FullPath)&quot;', ' ')</_SassFileList> <!-- all valid files, space seperated, surrounded with quotes -->
@@ -88,7 +88,7 @@
 -->
   <Target Name="DartSass_Build" 
           DependsOnTargets="DartSass_BuildArgsFromFileList"
-          BeforeTargets="BeforeBuild"  
+          BeforeTargets="AssignTargetPaths"  
           Condition="'$(DartSassBuilderArgs)' != ''  ">
     <Message Text="Invoking sass preprocessor..." Importance="$(DartSassMessageLevel)" />
 
@@ -100,7 +100,7 @@
 -->
   <Target Name="DartSass_SaveNewHash"
           AfterTargets="DartSass_Build"
-          BeforeTargets="BeforeBuild"  
+          BeforeTargets="AssignTargetPaths"  
           Condition=" '$(_DartSassHashChanged)' == 'true' ">
     <Message Text="Sass hash: saving new..." Importance="$(DartSassMessageLevel)" />
 
